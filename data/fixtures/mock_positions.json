@@ -1,0 +1,45 @@
+[
+  {
+    "address": "inj1demo_trader_alice",
+    "label": "Alice (Jakarta Freelancer)",
+    "positions": [
+      {
+        "market": "INJ/USDT PERP",
+        "direction": "long",
+        "quantity": "3200",
+        "entry_price": "14.30",
+        "mark_price": "13.85",
+        "liquidation_price": "12.58",
+        "margin": "8200",
+        "margin_ratio": 1.12,
+        "unrealized_pnl": -1440,
+        "leverage": "5x"
+      },
+      {
+        "market": "ETH/USDT PERP",
+        "direction": "short",
+        "quantity": "2.5",
+        "entry_price": "3800",
+        "mark_price": "3750",
+        "liquidation_price": "4200",
+        "margin": "4750",
+        "margin_ratio": 2.8,
+        "unrealized_pnl": 125,
+        "leverage": "3x"
+      }
+    ],
+    "spot_balances": [
+      {"denom": "inj", "amount": "150.5"},
+      {"denom": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7", "amount": "2340.50"}
+    ]
+  },
+  {
+    "address": "inj1demo_holder_bob",
+    "label": "Bob (Casual Staker)",
+    "positions": [],
+    "spot_balances": [
+      {"denom": "inj", "amount": "5200"},
+      {"denom": "peggy0xdAC17F958D2ee523a2206206994597C13D831ec7", "amount": "12500"}
+    ]
+  }
+]

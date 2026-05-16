@@ -1,0 +1,47 @@
+# INJ Sentinel Configuration
+# Copy this to config.yaml and customize
+
+# Network: "mainnet" or "testnet"
+network: mainnet
+
+# Polling interval in seconds (min: 5, max: 300)
+poll_interval_seconds: 30
+
+# Addresses to monitor
+addresses:
+  - address: "inj1your_address_here"
+    label: "My Main Wallet"
+  # - address: "inj1another_address"
+  #   label: "Trading Account"
+
+# Alert rules
+alert_rules:
+  - alert_type: liquidation_warning
+    threshold: 1.2  # Margin ratio below 1.2x
+    cooldown_seconds: 300
+  - alert_type: balance_change
+    threshold: 500  # USD value change > $500
+    cooldown_seconds: 600
+  - alert_type: margin_degradation
+    threshold: 10  # Margin dropped > 10% in 10min
+    cooldown_seconds: 300
+
+# Telegram notifications
+telegram:
+  enabled: false
+  bot_token: ""  # Or set INJ_SENTINEL_TELEGRAM_TOKEN env var
+  chat_id: ""    # Or set INJ_SENTINEL_TELEGRAM_CHAT_ID env var
+
+# Discord notifications
+discord:
+  enabled: false
+  webhook_url: ""  # Or set INJ_SENTINEL_DISCORD_WEBHOOK env var
+
+# LLM configuration
+llm:
+  provider: "openai"        # "openai" or "gemini"
+  model: "gpt-4o-mini"      # Model name
+  api_key: ""               # Or set OPENAI_API_KEY / GEMINI_API_KEY env var
+
+# Demo mode (use mock data instead of live chain)
+demo: false
