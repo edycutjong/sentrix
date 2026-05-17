@@ -104,3 +104,24 @@ alert_rules:
         config = SentinelConfig.load()
         assert config.llm.api_key == "gemini-test123"
         assert config.llm.provider == "gemini"
+
+    def test_discord_from_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Discord config from env vars."""
+        monkeypatch.setenv("SENTRIX_DISCORD_WEBHOOK", "https://discord.com/api/webhooks/123/abc")
+
+        config = SentinelConfig.load()
+        assert config.discord.enabled is True
+        assert config.discord.webhook_url == "https://discord.com/api/webhooks/123/abc"
+
+    def test_auto_load_default_config_yaml(self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Should auto-discover config.yaml in CWD if no path provided."""
+        yaml_content = "network: testnet\npoll_interval_seconds: 45\n"
+        config_file = tmp_path / "config.yaml"
+        config_file.write_text(yaml_content)
+
+        # Change CWD to the temp directory where config.yaml exists
+        monkeypatch.chdir(tmp_path)
+        
+        config = SentinelConfig.load()
+        assert config.network == "testnet"
+        assert config.poll_interval_seconds == 45

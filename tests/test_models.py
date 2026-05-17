@@ -3,11 +3,67 @@
 from __future__ import annotations
 
 from sentrix.models.position import (
+    AlertSeverity,
+    AlertType,
+    DeliveryChannel,
     DerivativePosition,
     PortfolioSnapshot,
     PositionDirection,
     SpotBalance,
 )
+from sentrix.models.alert import Alert, AlertRule, RiskEvent
+
+
+class TestAlert:
+    """Tests for Alert model."""
+
+    def test_severity_emoji(self) -> None:
+        alert = Alert(
+            address="inj1test",
+            alert_type=AlertType.LIQUIDATION_WARNING,
+            severity=AlertSeverity.LOW,
+            title="Test",
+            message="Msg"
+        )
+        assert alert.severity_emoji == "ℹ️"
+        alert.severity = AlertSeverity.MEDIUM
+        assert alert.severity_emoji == "⚡"
+        alert.severity = AlertSeverity.HIGH
+        assert alert.severity_emoji == "⚠️"
+        alert.severity = AlertSeverity.CRITICAL
+        assert alert.severity_emoji == "🚨"
+
+    def test_is_critical(self) -> None:
+        alert = Alert(
+            address="inj1test",
+            alert_type=AlertType.LIQUIDATION_WARNING,
+            severity=AlertSeverity.LOW,
+            title="Test",
+            message="Msg"
+        )
+        assert not alert.is_critical
+        alert.severity = AlertSeverity.HIGH
+        assert alert.is_critical
+
+
+class TestAlertRule:
+    """Tests for AlertRule model."""
+
+    def test_description(self) -> None:
+        rule1 = AlertRule(alert_type=AlertType.LIQUIDATION_WARNING, threshold=1.2)
+        assert rule1.description == "Margin ratio below 1.2x"
+
+        rule2 = AlertRule(alert_type=AlertType.BALANCE_CHANGE, threshold=500.0)
+        assert rule2.description == "Balance change > $500.0"
+
+        rule3 = AlertRule(alert_type=AlertType.MARGIN_DEGRADATION, threshold=10.0)
+        assert rule3.description == "Margin dropped > 10.0% in 10min"
+
+        rule4 = AlertRule(alert_type=AlertType.WHALE_MOVEMENT, threshold=10000.0)
+        assert rule4.description == "Movement > $10,000"
+
+        rule5 = AlertRule(alert_type=AlertType.POSITION_OPENED, threshold=0.0)
+        assert rule5.description == "position_opened @ 0.0"
 
 
 class TestDerivativePosition:
@@ -77,6 +133,54 @@ class TestDerivativePosition:
             leverage="1x",
         )
         assert pos.margin_ratio == float("inf")
+
+    def test_position_exceptions(self) -> None:
+        """Test properties handle invalid numbers gracefully."""
+        pos = DerivativePosition(
+            market_id="0x_test",
+            ticker="TEST/USDT",
+            direction=PositionDirection.LONG,
+            quantity="invalid",
+            entry_price="invalid",
+            mark_price="invalid",
+            liquidation_price="invalid",
+            margin="1000",
+            leverage="1x",
+        )
+        assert pos.margin_ratio == float("inf")
+        assert pos.liquidation_distance_pct == 0.0
+        assert pos.unrealized_pnl == 0.0
+        assert pos.unrealized_pnl_pct == 0.0
+        assert pos.notional_value == 0.0
+
+    def test_position_zero_mark_price(self) -> None:
+        pos = DerivativePosition(
+            market_id="0x_test",
+            ticker="TEST/USDT",
+            direction=PositionDirection.SHORT,
+            quantity="100",
+            entry_price="10",
+            mark_price="0",
+            liquidation_price="10",
+            margin="1000",
+            leverage="1x",
+        )
+        assert pos.margin_ratio == float("inf")
+        assert pos.liquidation_distance_pct == 0.0
+
+    def test_unrealized_pnl_pct_zero_notional(self) -> None:
+        pos = DerivativePosition(
+            market_id="0x_test",
+            ticker="TEST/USDT",
+            direction=PositionDirection.LONG,
+            quantity="0",
+            entry_price="0",
+            mark_price="10",
+            liquidation_price="0",
+            margin="1000",
+            leverage="1x",
+        )
+        assert pos.unrealized_pnl_pct == 0.0
 
 
 class TestSpotBalance:

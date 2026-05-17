@@ -192,3 +192,21 @@ class TestRiskDetector:
         snapshot = PortfolioSnapshot(address="inj1test")
         events = detector.detect(snapshot)
         assert len(events) == 0
+
+    def test_infinite_margin_ratio(self) -> None:
+        """Infinite margin ratio (no liquidation risk) should return None."""
+        detector = RiskDetector()
+        pos = DerivativePosition(
+            market_id="0x_test",
+            ticker="INJ/USDT PERP",
+            direction=PositionDirection.LONG,
+            quantity="1000",
+            entry_price="14.00",
+            mark_price="13.00",
+            liquidation_price="0",  # Causes margin_ratio to be inf
+            margin="2000",
+            leverage="1x",
+        )
+        snapshot = PortfolioSnapshot(address="inj1test", derivative_positions=[pos])
+        events = detector.detect(snapshot)
+        assert len(events) == 0
