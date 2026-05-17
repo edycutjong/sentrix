@@ -1,4 +1,4 @@
 .PHONY: test
 
 test:
-	pytest --cov=sentrix
+	PYTHONPATH=src pytest --cov=sentrix
