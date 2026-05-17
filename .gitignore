@@ -44,3 +44,7 @@ Thumbs.db
 
 # Config (user-specific)
 config.yaml
+
+# Assets
+docs/assets
+assets/
