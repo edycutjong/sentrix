@@ -4,12 +4,12 @@ from __future__ import annotations
 
 import logging
 
-from inj_sentinel.models.position import DerivativePosition, PortfolioSnapshot
+from sentrix.models.position import DerivativePosition, PortfolioSnapshot
 
 logger = logging.getLogger(__name__)
 
 # System prompt for risk analysis
-SYSTEM_PROMPT = """You are INJ Sentinel, an AI risk analyst for Injective DeFi positions.
+SYSTEM_PROMPT = """You are Sentrix, an AI risk analyst for Injective DeFi positions.
 Your job is to translate raw trading position data into clear, actionable alerts.
 
 Rules:

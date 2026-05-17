@@ -7,8 +7,8 @@ import logging
 
 import aiohttp
 
-from inj_sentinel.models.alert import Alert
-from inj_sentinel.models.position import AlertSeverity
+from sentrix.models.alert import Alert
+from sentrix.models.position import AlertSeverity
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class DiscordDelivery:
         """
         embed = self._build_embed(alert)
         payload = {
-            "username": "INJ Sentinel",
+            "username": "Sentrix",
             "avatar_url": "https://injective.com/favicon.ico",
             "embeds": [embed],
         }
@@ -64,7 +64,7 @@ class DiscordDelivery:
             "title": f"{alert.severity_emoji} {alert.title}",
             "color": color,
             "timestamp": alert.created_at.isoformat(),
-            "footer": {"text": "INJ Sentinel v0.1.0"},
+            "footer": {"text": "Sentrix v0.1.0"},
         }
 
         fields = []

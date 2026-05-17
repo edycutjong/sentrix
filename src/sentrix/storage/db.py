@@ -8,7 +8,7 @@ from pathlib import Path
 
 import aiosqlite
 
-from inj_sentinel.models.alert import Alert
+from sentrix.models.alert import Alert
 
 logger = logging.getLogger(__name__)
 

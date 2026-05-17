@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import logging
 
-from inj_sentinel.clients.llm import LLMClient
-from inj_sentinel.models.alert import Alert, RiskEvent
-from inj_sentinel.models.position import AlertSeverity
+from sentrix.clients.llm import LLMClient
+from sentrix.models.alert import Alert, RiskEvent
+from sentrix.models.position import AlertSeverity
 
 logger = logging.getLogger(__name__)
 

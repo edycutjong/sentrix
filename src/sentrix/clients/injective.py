@@ -1,4 +1,4 @@
-"""Injective SDK client wrapper for INJ Sentinel.
+"""Injective SDK client wrapper for Sentrix.
 
 Abstracts the Injective gRPC APIs into a simple interface
 for fetching portfolio data (positions, balances, prices).
@@ -10,7 +10,7 @@ import json
 import logging
 from pathlib import Path
 
-from inj_sentinel.models.position import (
+from sentrix.models.position import (
     DerivativePosition,
     PortfolioSnapshot,
     PositionDirection,

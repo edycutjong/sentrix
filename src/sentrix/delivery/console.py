@@ -8,8 +8,8 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
-from inj_sentinel.models.alert import Alert
-from inj_sentinel.models.position import AlertSeverity
+from sentrix.models.alert import Alert
+from sentrix.models.position import AlertSeverity
 
 logger = logging.getLogger(__name__)
 

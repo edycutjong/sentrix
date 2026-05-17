@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from inj_sentinel.clients.llm import LLMClient
-from inj_sentinel.models.position import (
+from sentrix.clients.llm import LLMClient
+from sentrix.models.position import (
     DerivativePosition,
     PortfolioSnapshot,
 )

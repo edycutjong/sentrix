@@ -1,4 +1,4 @@
-# INJ Sentinel Configuration
+# Sentrix Configuration
 # Copy this to config.yaml and customize
 
 # Network: "mainnet" or "testnet"
@@ -29,13 +29,13 @@ alert_rules:
 # Telegram notifications
 telegram:
   enabled: false
-  bot_token: ""  # Or set INJ_SENTINEL_TELEGRAM_TOKEN env var
-  chat_id: ""    # Or set INJ_SENTINEL_TELEGRAM_CHAT_ID env var
+  bot_token: ""  # Or set SENTRIX_TELEGRAM_TOKEN env var
+  chat_id: ""    # Or set SENTRIX_TELEGRAM_CHAT_ID env var
 
 # Discord notifications
 discord:
   enabled: false
-  webhook_url: ""  # Or set INJ_SENTINEL_DISCORD_WEBHOOK env var
+  webhook_url: ""  # Or set SENTRIX_DISCORD_WEBHOOK env var
 
 # LLM configuration
 llm:

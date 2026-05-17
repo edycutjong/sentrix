@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from inj_sentinel.clients.injective import InjectiveClient
+from sentrix.clients.injective import InjectiveClient
 
 
 class TestInjectiveClientDemo:

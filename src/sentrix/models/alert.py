@@ -1,4 +1,4 @@
-"""Data models for INJ Sentinel alerts."""
+"""Data models for Sentrix alerts."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 from pydantic import BaseModel, Field
 
-from inj_sentinel.models.position import (
+from sentrix.models.position import (
     AlertSeverity,
     AlertType,
     DeliveryChannel,

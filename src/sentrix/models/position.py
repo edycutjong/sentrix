@@ -1,4 +1,4 @@
-"""Data models for INJ Sentinel positions and portfolio state."""
+"""Data models for Sentrix positions and portfolio state."""
 
 from __future__ import annotations
 

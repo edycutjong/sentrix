@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from inj_sentinel.models.position import (
+from sentrix.models.position import (
     DerivativePosition,
     PortfolioSnapshot,
     PositionDirection,

@@ -1,4 +1,4 @@
-"""Configuration management for INJ Sentinel."""
+"""Configuration management for Sentrix."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 import yaml
 from pydantic import BaseModel, Field
 
-from inj_sentinel.models.position import AlertType
+from sentrix.models.position import AlertType
 
 
 class TelegramConfig(BaseModel):
@@ -51,7 +51,7 @@ class WatchedAddress(BaseModel):
 
 
 class SentinelConfig(BaseModel):
-    """Top-level INJ Sentinel configuration."""
+    """Top-level Sentrix configuration."""
 
     # Network
     network: str = Field(default="mainnet", description="'mainnet' or 'testnet'")
@@ -116,9 +116,9 @@ class SentinelConfig(BaseModel):
 
         # 2. Override with env vars
         env_overrides = {
-            "INJ_SENTINEL_NETWORK": "network",
-            "INJ_SENTINEL_POLL_INTERVAL": "poll_interval_seconds",
-            "INJ_SENTINEL_DEMO": "demo",
+            "SENTRIX_NETWORK": "network",
+            "SENTRIX_POLL_INTERVAL": "poll_interval_seconds",
+            "SENTRIX_DEMO": "demo",
         }
         for env_key, config_key in env_overrides.items():
             val = os.environ.get(env_key)
@@ -131,8 +131,8 @@ class SentinelConfig(BaseModel):
                     data[config_key] = val
 
         # Telegram from env
-        telegram_token = os.environ.get("INJ_SENTINEL_TELEGRAM_TOKEN")
-        telegram_chat = os.environ.get("INJ_SENTINEL_TELEGRAM_CHAT_ID")
+        telegram_token = os.environ.get("SENTRIX_TELEGRAM_TOKEN")
+        telegram_chat = os.environ.get("SENTRIX_TELEGRAM_CHAT_ID")
         if telegram_token:
             tg = data.get("telegram", {})
             tg["bot_token"] = telegram_token
@@ -142,7 +142,7 @@ class SentinelConfig(BaseModel):
             data["telegram"] = tg
 
         # Discord from env
-        discord_url = os.environ.get("INJ_SENTINEL_DISCORD_WEBHOOK")
+        discord_url = os.environ.get("SENTRIX_DISCORD_WEBHOOK")
         if discord_url:
             dc = data.get("discord", {})
             dc["webhook_url"] = discord_url
@@ -160,7 +160,7 @@ class SentinelConfig(BaseModel):
             data["llm"] = llm
 
         # Addresses from env (comma-separated)
-        env_addrs = os.environ.get("INJ_SENTINEL_ADDRESSES")
+        env_addrs = os.environ.get("SENTRIX_ADDRESSES")
         if env_addrs and "addresses" not in data:
             data["addresses"] = [
                 {"address": addr.strip()} for addr in env_addrs.split(",") if addr.strip()

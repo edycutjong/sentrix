@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from inj_sentinel.models.alert import AlertRule, RiskEvent
-from inj_sentinel.models.position import (
+from sentrix.models.alert import AlertRule, RiskEvent
+from sentrix.models.position import (
     AlertSeverity,
     AlertType,
     DerivativePosition,

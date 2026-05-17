@@ -6,16 +6,16 @@ import asyncio
 import logging
 from datetime import datetime, timezone
 
-from inj_sentinel.clients.injective import InjectiveClient
-from inj_sentinel.clients.llm import LLMClient
-from inj_sentinel.config import SentinelConfig
-from inj_sentinel.core.analyzer import RiskAnalyzer
-from inj_sentinel.core.detector import RiskDetector
-from inj_sentinel.delivery.console import ConsoleDelivery
-from inj_sentinel.delivery.discord import DiscordDelivery
-from inj_sentinel.delivery.telegram import TelegramDelivery
-from inj_sentinel.models.alert import Alert, AlertRule
-from inj_sentinel.models.position import DeliveryChannel
+from sentrix.clients.injective import InjectiveClient
+from sentrix.clients.llm import LLMClient
+from sentrix.config import SentinelConfig
+from sentrix.core.analyzer import RiskAnalyzer
+from sentrix.core.detector import RiskDetector
+from sentrix.delivery.console import ConsoleDelivery
+from sentrix.delivery.discord import DiscordDelivery
+from sentrix.delivery.telegram import TelegramDelivery
+from sentrix.models.alert import Alert, AlertRule
+from sentrix.models.position import DeliveryChannel
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +94,7 @@ class Poller:
 
         self._running = True
         logger.info(
-            "Starting INJ Sentinel — monitoring %d address(es) every %ds",
+            "Starting Sentrix — monitoring %d address(es) every %ds",
             len(self.config.addresses),
             self.config.poll_interval_seconds,
         )
@@ -113,7 +113,7 @@ class Poller:
         """Stop the polling loop and clean up."""
         self._running = False
         await self.injective.close()
-        logger.info("INJ Sentinel stopped after %d polls", self._poll_count)
+        logger.info("Sentrix stopped after %d polls", self._poll_count)
 
     async def _poll_cycle(self) -> None:
         """Execute a single poll cycle across all watched addresses."""

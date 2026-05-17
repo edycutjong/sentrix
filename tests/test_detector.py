@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from inj_sentinel.core.detector import RiskDetector
-from inj_sentinel.models.alert import AlertRule
-from inj_sentinel.models.position import (
+from sentrix.core.detector import RiskDetector
+from sentrix.models.alert import AlertRule
+from sentrix.models.position import (
     AlertSeverity,
     AlertType,
     DerivativePosition,

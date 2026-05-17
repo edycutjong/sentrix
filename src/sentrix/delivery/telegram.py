@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 
-from inj_sentinel.models.alert import Alert
+from sentrix.models.alert import Alert
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +58,7 @@ class TelegramDelivery:
     def _format_message(self, alert: Alert) -> str:
         """Format alert for Telegram (HTML parse mode)."""
         parts = [
-            "🛡️ <b>INJ Sentinel Alert</b>",
+            "🛡️ <b>Sentrix Alert</b>",
             "",
             f"{alert.severity_emoji} <b>{alert.title}</b>",
             "",

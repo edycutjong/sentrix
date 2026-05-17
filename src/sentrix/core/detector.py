@@ -1,4 +1,4 @@
-"""Risk detection engine for INJ Sentinel.
+"""Risk detection engine for Sentrix.
 
 Compares portfolio snapshots against configured alert rules
 to detect liquidation proximity, balance changes, and margin degradation.
@@ -9,8 +9,8 @@ from __future__ import annotations
 import logging
 from datetime import datetime, timezone
 
-from inj_sentinel.models.alert import AlertRule, RiskEvent
-from inj_sentinel.models.position import (
+from sentrix.models.alert import AlertRule, RiskEvent
+from sentrix.models.position import (
     AlertSeverity,
     AlertType,
     DerivativePosition,

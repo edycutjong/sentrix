@@ -1,4 +1,4 @@
-"""CLI entry point for INJ Sentinel."""
+"""CLI entry point for Sentrix."""
 
 from __future__ import annotations
 
@@ -10,9 +10,9 @@ import click
 from rich.console import Console
 from rich.table import Table
 
-from inj_sentinel import __version__
-from inj_sentinel.config import SentinelConfig, WatchedAddress
-from inj_sentinel.core.poller import Poller
+from sentrix import __version__
+from sentrix.config import SentinelConfig, WatchedAddress
+from sentrix.core.poller import Poller
 
 console = Console()
 
@@ -32,9 +32,9 @@ def setup_logging(verbose: bool = False) -> None:
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="inj-sentinel")
+@click.version_option(version=__version__, prog_name="sentrix")
 def cli() -> None:
-    """🛡️ INJ Sentinel — AI-powered DeFi position monitor for Injective.
+    """🛡️ Sentrix — AI-powered DeFi position monitor for Injective.
 
     Monitor your Injective positions 24/7 and receive natural-language
     risk alerts via Telegram or Discord.
@@ -59,11 +59,11 @@ def watch(
 
     Examples:
 
-        inj-sentinel watch --demo
+        sentrix watch --demo
 
-        inj-sentinel watch --address inj1abc... --demo
+        sentrix watch --address inj1abc... --demo
 
-        inj-sentinel watch --config config.yaml
+        sentrix watch --config config.yaml
     """
     setup_logging(verbose)
 
@@ -71,7 +71,7 @@ def watch(
     console.print()
     console.print("╭──────────────────────────────────────────────────╮", style="cyan")
     console.print(
-        f"│  🛡️  INJ Sentinel v{__version__}                        │", style="cyan"
+        f"│  🛡️  Sentrix v{__version__}                        │", style="cyan"
     )
     console.print("╰──────────────────────────────────────────────────╯", style="cyan")
     console.print()
@@ -115,7 +115,7 @@ def watch(
         try:
             asyncio.run(poller.start())
         except KeyboardInterrupt:
-            console.print("\n👋 INJ Sentinel stopped", style="dim")
+            console.print("\n👋 Sentrix stopped", style="dim")
 
 
 @cli.command()
@@ -127,9 +127,9 @@ def status(config: str | None, address: str | None, demo: bool) -> None:
 
     Examples:
 
-        inj-sentinel status --demo
+        sentrix status --demo
 
-        inj-sentinel status --address inj1abc...
+        sentrix status --address inj1abc...
     """
     setup_logging(False)
 
@@ -141,7 +141,7 @@ def status(config: str | None, address: str | None, demo: bool) -> None:
     if not cfg.addresses and cfg.demo:
         cfg.addresses = [WatchedAddress(address="demo", label="Demo Trader")]
 
-    from inj_sentinel.clients.injective import InjectiveClient
+    from sentrix.clients.injective import InjectiveClient
 
     async def _show_status() -> None:
         client = InjectiveClient(network=cfg.network, demo=cfg.demo)
@@ -200,7 +200,7 @@ def history() -> None:
 
     Reads from the local SQLite database (sentinel.db).
     """
-    from inj_sentinel.storage.db import AlertStore
+    from sentrix.storage.db import AlertStore
 
     async def _show_history() -> None:
         store = AlertStore()

@@ -1,7 +1,7 @@
-"""INJ Sentinel data models."""
+"""Sentrix data models."""
 
-from inj_sentinel.models.alert import Alert, AlertRule, RiskEvent
-from inj_sentinel.models.position import (
+from sentrix.models.alert import Alert, AlertRule, RiskEvent
+from sentrix.models.position import (
     AlertSeverity,
     AlertType,
     DeliveryChannel,

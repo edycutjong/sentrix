@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from inj_sentinel.config import SentinelConfig
-from inj_sentinel.models.position import AlertType
+from sentrix.config import SentinelConfig
+from sentrix.models.position import AlertType
 
 
 class TestSentinelConfig:
@@ -48,9 +48,9 @@ alert_rules:
 
     def test_env_var_override(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Environment variables should override YAML settings."""
-        monkeypatch.setenv("INJ_SENTINEL_NETWORK", "testnet")
-        monkeypatch.setenv("INJ_SENTINEL_DEMO", "true")
-        monkeypatch.setenv("INJ_SENTINEL_POLL_INTERVAL", "120")
+        monkeypatch.setenv("SENTRIX_NETWORK", "testnet")
+        monkeypatch.setenv("SENTRIX_DEMO", "true")
+        monkeypatch.setenv("SENTRIX_POLL_INTERVAL", "120")
 
         config = SentinelConfig.load()
         assert config.network == "testnet"
@@ -59,8 +59,8 @@ alert_rules:
 
     def test_telegram_from_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Telegram config from env vars."""
-        monkeypatch.setenv("INJ_SENTINEL_TELEGRAM_TOKEN", "test_token")
-        monkeypatch.setenv("INJ_SENTINEL_TELEGRAM_CHAT_ID", "123456")
+        monkeypatch.setenv("SENTRIX_TELEGRAM_TOKEN", "test_token")
+        monkeypatch.setenv("SENTRIX_TELEGRAM_CHAT_ID", "123456")
 
         config = SentinelConfig.load()
         assert config.telegram.enabled is True
@@ -69,7 +69,7 @@ alert_rules:
 
     def test_addresses_from_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """Addresses from comma-separated env var."""
-        monkeypatch.setenv("INJ_SENTINEL_ADDRESSES", "inj1aaa,inj1bbb")
+        monkeypatch.setenv("SENTRIX_ADDRESSES", "inj1aaa,inj1bbb")
 
         config = SentinelConfig.load()
         assert len(config.addresses) == 2

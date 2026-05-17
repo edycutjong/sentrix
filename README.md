@@ -1,4 +1,4 @@
-# 🛡️ INJ Sentinel
+# 🛡️ Sentrix
 
 **AI-powered DeFi position monitor for Injective.**
 
@@ -7,8 +7,8 @@ Detects liquidation risks across derivative positions, explains them in plain En
 ## Quick Start
 
 ```bash
-pip install inj-sentinel
-inj-sentinel watch --demo
+pip install sentrix
+sentrix watch --demo
 ```
 
 ## Features
@@ -23,7 +23,7 @@ inj-sentinel watch --demo
 ## Installation
 
 ```bash
-pip install inj-sentinel
+pip install sentrix
 cp config.example.yaml config.yaml  # Edit with your settings
 ```
 
@@ -31,16 +31,16 @@ cp config.example.yaml config.yaml  # Edit with your settings
 
 ```bash
 # Demo mode (mock data)
-inj-sentinel watch --demo
+sentrix watch --demo
 
 # Monitor a specific address
-inj-sentinel watch --address inj1abc...
+sentrix watch --address inj1abc...
 
 # Show current positions
-inj-sentinel status --demo
+sentrix status --demo
 
 # View alert history
-inj-sentinel history
+sentrix history
 ```
 
 ## Configuration
@@ -65,8 +65,8 @@ llm:
 Or use environment variables:
 
 ```bash
-export INJ_SENTINEL_ADDRESSES=inj1aaa,inj1bbb
-export INJ_SENTINEL_TELEGRAM_TOKEN=your_token
+export SENTRIX_ADDRESSES=inj1aaa,inj1bbb
+export SENTRIX_TELEGRAM_TOKEN=your_token
 export OPENAI_API_KEY=sk-...
 ```
 
@@ -89,8 +89,8 @@ Monitor → Detect → Analyze → Deliver
 ## Development
 
 ```bash
-git clone https://github.com/edycutjong/inj-sentinel.git
-cd inj-sentinel
+git clone https://github.com/edycutjong/sentrix.git
+cd sentrix
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 pytest -v
