@@ -73,18 +73,18 @@ class RiskAnalyzer:
 
     def _describe_event(self, event: RiskEvent) -> str:
         """Create a brief context description for the LLM."""
-        descriptions = {
-            "liquidation_warning": (
-                f"Margin ratio at {event.raw_data.get('margin_ratio', '?'):.2f}x, "
-                f"threshold is {event.raw_data.get('threshold', '?')}x"
-            ),
-            "balance_change": (
-                f"Balance {event.raw_data.get('direction', 'changed')} by "
-                f"${event.raw_data.get('change_usd', 0):,.2f}"
-            ),
-            "margin_degradation": "Margin ratio declining rapidly",
-        }
-        return descriptions.get(event.alert_type.value, "Risk detected")
+        alert_val = event.alert_type.value
+        if alert_val == "liquidation_warning":
+            margin = event.raw_data.get("margin_ratio", 0)
+            thresh = event.raw_data.get("threshold", "?")
+            return f"Margin ratio at {margin:.2f}x, threshold is {thresh}x"
+        elif alert_val == "balance_change":
+            direction = event.raw_data.get("direction", "changed")
+            change = event.raw_data.get("change_usd", 0)
+            return f"Balance {direction} by ${change:,.2f}"
+        elif alert_val == "margin_degradation":
+            return "Margin ratio declining rapidly"
+        return "Risk detected"
 
     def _generic_alert(self, event: RiskEvent) -> tuple[str, str]:
         """Generate a generic alert when no position context is available."""

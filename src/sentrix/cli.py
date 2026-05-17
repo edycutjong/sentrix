@@ -238,5 +238,5 @@ def history() -> None:
     asyncio.run(_show_history())
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     cli()

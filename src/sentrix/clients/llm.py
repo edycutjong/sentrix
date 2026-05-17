@@ -131,8 +131,11 @@ class LLMClient:
             content = ""
 
         # Parse title from first line, rest is message
+        if not content.strip():
+            return "Risk Alert", ""
+            
         lines = content.strip().split("\n", 1)
-        title = lines[0].strip().lstrip("#").strip() if lines else "Risk Alert"
+        title = lines[0].strip().lstrip("#").strip()
         message = lines[1].strip() if len(lines) > 1 else content.strip()
 
         return title, message
