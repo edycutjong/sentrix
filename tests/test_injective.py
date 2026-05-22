@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import sys
-from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
@@ -62,16 +61,16 @@ class TestInjectiveClientDemo:
                 ]
             }
         ]
-        
+
         with patch('sentrix.clients.injective.Path') as mock_path:
             mock_file = MagicMock()
             mock_file.exists.return_value = True
             mock_file.read_text.return_value = json.dumps(mock_data)
-            
+
             mock_path.return_value.parent.parent.parent.parent.__truediv__.return_value.__truediv__.return_value.__truediv__.return_value = mock_file
-            
+
             snapshot = await client.fetch_portfolio("inj1demo_trader_alice", "Alice")
-            
+
             if snapshot.derivative_positions:
                 assert snapshot.derivative_positions[0].ticker == "INJ/USDT PERP"
 
@@ -80,7 +79,7 @@ class TestInjectiveClientDemo:
         """Should load first fixture if address not found."""
         client = InjectiveClient(demo=True)
         await client.initialize()
-        
+
         mock_data = [
             {
                 "address": "inj1other",
@@ -88,14 +87,14 @@ class TestInjectiveClientDemo:
                 "spot_balances": []
             }
         ]
-        
+
         with patch('sentrix.clients.injective.Path') as mock_path:
             mock_file = MagicMock()
             mock_file.exists.return_value = True
             mock_file.read_text.return_value = json.dumps(mock_data)
-            
+
             mock_path.return_value.parent.parent.parent.parent.__truediv__.return_value.__truediv__.return_value.__truediv__.return_value = mock_file
-            
+
             snapshot = await client.fetch_portfolio("inj1notfound", "Label")
             assert snapshot.address == "inj1other"
             assert snapshot.label == "Label"
@@ -105,13 +104,13 @@ class TestInjectiveClientDemo:
         """Should generate hardcoded demo data when fixtures not available."""
         client = InjectiveClient(demo=True)
         await client.initialize()
-        
+
         with patch('sentrix.clients.injective.Path') as mock_path:
             mock_file = MagicMock()
             mock_file.exists.return_value = False
-            
+
             mock_path.return_value.parent.parent.parent.parent.__truediv__.return_value.__truediv__.return_value.__truediv__.return_value = mock_file
-            
+
             snapshot = await client.fetch_portfolio("inj1notfound", "Label")
             assert snapshot.address == "inj1notfound"
             assert snapshot.label == "Label"
@@ -129,16 +128,16 @@ class TestInjectiveClientDemo:
 
 class TestInjectiveClientLive:
     """Tests for live InjectiveClient execution."""
-    
+
     @pytest.mark.asyncio
     async def test_initialize_import_error(self) -> None:
         """Should fallback to demo mode if injective-py is missing."""
         client = InjectiveClient(network="mainnet", demo=False)
-        
+
         # Patch sys.modules to simulate missing injective-py
         with patch.dict(sys.modules, {'pyinjective.async_client': None}):
             await client.initialize()
-            
+
         assert client._initialized is True
         assert client.demo is True
 
@@ -146,14 +145,14 @@ class TestInjectiveClientLive:
     async def test_initialize_live(self) -> None:
         """Should initialize AsyncClient."""
         client = InjectiveClient(network="testnet", demo=False)
-        
+
         mock_network = MagicMock()
         mock_async_client = MagicMock()
-        
+
         mock_pyinjective = MagicMock()
         mock_pyinjective.async_client.AsyncClient = mock_async_client
         mock_pyinjective.core.network.Network.testnet = mock_network
-        
+
         with patch.dict(sys.modules, {
             'pyinjective': mock_pyinjective,
             'pyinjective.async_client': mock_pyinjective.async_client,
@@ -161,31 +160,30 @@ class TestInjectiveClientLive:
             'pyinjective.core.network': mock_pyinjective.core.network,
         }):
             await client.initialize()
-            
+
         assert client._initialized is True
         assert client.demo is False
         assert client._client is not None
-        
+
     @pytest.mark.asyncio
     async def test_initialize_live_exception(self) -> None:
         """Should raise Exception if connection fails."""
         client = InjectiveClient(network="mainnet", demo=False)
-        
+
         mock_network = MagicMock()
         mock_async_client = MagicMock(side_effect=Exception("Connection failed"))
-        
+
         mock_pyinjective = MagicMock()
         mock_pyinjective.async_client.AsyncClient = mock_async_client
         mock_pyinjective.core.network.Network.mainnet = mock_network
-        
+
         with patch.dict(sys.modules, {
             'pyinjective': mock_pyinjective,
             'pyinjective.async_client': mock_pyinjective.async_client,
             'pyinjective.core': mock_pyinjective.core,
             'pyinjective.core.network': mock_pyinjective.core.network,
-        }):
-            with pytest.raises(Exception):
-                await client.initialize()
+        }), pytest.raises(Exception, match="Connection failed"):
+            await client.initialize()
 
     @pytest.mark.asyncio
     async def test_fetch_portfolio_live(self) -> None:
@@ -193,11 +191,11 @@ class TestInjectiveClientLive:
         client = InjectiveClient(demo=False)
         client._client = AsyncMock()
         client._initialized = True
-        
+
         client._client.fetch_bank_balances.return_value = {
             "balances": [{"denom": "inj", "amount": "100"}]
         }
-        
+
         client._client.fetch_derivative_positions.return_value = {
             "positions": [
                 {
@@ -219,13 +217,13 @@ class TestInjectiveClientLive:
                 }
             ]
         }
-        
+
         snapshot = await client.fetch_portfolio("inj1test")
-        
+
         assert snapshot.address == "inj1test"
         assert len(snapshot.spot_balances) == 1
         assert snapshot.spot_balances[0].amount == "100"
-        
+
         assert len(snapshot.derivative_positions) == 2
         assert snapshot.derivative_positions[0].direction == PositionDirection.LONG
         assert snapshot.derivative_positions[1].direction == PositionDirection.SHORT
@@ -237,12 +235,12 @@ class TestInjectiveClientLive:
         client = InjectiveClient(demo=False)
         client._client = AsyncMock()
         client._initialized = True
-        
+
         client._client.fetch_bank_balances.side_effect = Exception("API error")
         client._client.fetch_derivative_positions.side_effect = Exception("API error")
-        
+
         snapshot = await client.fetch_portfolio("inj1test")
-        
+
         assert snapshot.address == "inj1test"
         assert len(snapshot.spot_balances) == 0
         assert len(snapshot.derivative_positions) == 0
@@ -252,9 +250,9 @@ class TestInjectiveClientLive:
         """Should return empty if no client initialized."""
         client = InjectiveClient(demo=False)
         client._client = None
-        
+
         spot = await client._fetch_spot_balances("inj1test")
         assert spot == []
-        
+
         deriv = await client._fetch_derivative_positions("inj1test")
         assert deriv == []

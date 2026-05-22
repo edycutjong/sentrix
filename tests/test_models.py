@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
+from sentrix.models.alert import Alert, AlertRule
 from sentrix.models.position import (
     AlertSeverity,
     AlertType,
-    DeliveryChannel,
     DerivativePosition,
     PortfolioSnapshot,
     PositionDirection,
     SpotBalance,
 )
-from sentrix.models.alert import Alert, AlertRule, RiskEvent
 
 
 class TestAlert:

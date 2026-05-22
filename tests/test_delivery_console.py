@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 from rich.panel import Panel
@@ -26,14 +26,14 @@ async def test_console_delivery_send() -> None:
     )
 
     delivery = ConsoleDelivery()
-    
+
     with patch.object(delivery.console, "print") as mock_print:
         await delivery.send(alert)
 
         mock_print.assert_called_once()
         args, kwargs = mock_print.call_args
         panel = args[0]
-        
+
         assert isinstance(panel, Panel)
         assert panel.title == "High Risk"
         assert panel.border_style == "red"  # Because it's critical/high (is_critical=True)

@@ -1,11 +1,17 @@
-import pytest
-import aiosqlite
-from pathlib import Path
-from datetime import datetime
+from datetime import UTC, datetime
 
+import aiosqlite
+import pytest
+
+from sentrix.models.alert import Alert
+from sentrix.models.position import (
+    AlertSeverity,
+    AlertType,
+    DeliveryChannel,
+    DerivativePosition,
+    PositionDirection,
+)
 from sentrix.storage.db import AlertStore
-from sentrix.models.alert import Alert, AlertType, AlertSeverity, DeliveryChannel
-from sentrix.models.position import DerivativePosition, PositionDirection
 
 
 @pytest.fixture
@@ -42,7 +48,7 @@ def sample_alert():
             leverage="5x"
         ),
         delivered_via=[DeliveryChannel.CONSOLE],
-        created_at=datetime.utcnow()
+        created_at=datetime.now(UTC)
     )
 
 
@@ -54,11 +60,11 @@ async def test_initialize(memory_db_path):
     assert store._initialized
 
     # Verify tables are created
-    async with aiosqlite.connect(memory_db_path) as db:
-        async with db.execute("SELECT name FROM sqlite_master WHERE type='table';") as cursor:
-            tables = [row[0] for row in await cursor.fetchall()]
-            assert "alerts" in tables
-            assert "watched_addresses" in tables
+    async with aiosqlite.connect(memory_db_path) as db, \
+               db.execute("SELECT name FROM sqlite_master WHERE type='table';") as cursor:
+        tables = [row[0] for row in await cursor.fetchall()]
+        assert "alerts" in tables
+        assert "watched_addresses" in tables
 
 
 @pytest.mark.asyncio
@@ -72,14 +78,14 @@ async def test_save_alert(alert_store, sample_alert):
 async def test_get_recent_alerts(alert_store, sample_alert):
     # Save a couple of alerts
     await alert_store.save_alert(sample_alert)
-    
+
     sample_alert.address = "inj1test456"
     await alert_store.save_alert(sample_alert)
-    
+
     # Get all alerts
     all_alerts = await alert_store.get_recent_alerts(limit=10)
     assert len(all_alerts) == 2
-    
+
     # Get alerts for specific address
     specific_alerts = await alert_store.get_recent_alerts(address="inj1test123", limit=10)
     assert len(specific_alerts) == 1
@@ -89,7 +95,7 @@ async def test_get_recent_alerts(alert_store, sample_alert):
 @pytest.mark.asyncio
 async def test_get_alert_count(alert_store, sample_alert):
     assert await alert_store.get_alert_count() == 0
-    
+
     await alert_store.save_alert(sample_alert)
     assert await alert_store.get_alert_count() == 1
     assert await alert_store.get_alert_count(address="inj1test123") == 1

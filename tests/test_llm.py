@@ -66,9 +66,9 @@ class TestLLMClient:
 
     def test_calculate_margin_to_safety_edge_cases(self) -> None:
         client = LLMClient()
-        
+
         from sentrix.models.position import DerivativePosition, PositionDirection
-        
+
         # Test ratio >= target_ratio
         safe_pos = DerivativePosition(
             market_id="test",
@@ -80,55 +80,54 @@ class TestLLMClient:
             liquidation_price="5",
             margin="10",
             leverage="1",
-            unrealized_pnl="0"
         )
         # Margin ratio will be large enough
         safe_pos.margin = "100"
         margin_needed = client._calculate_margin_to_safety(safe_pos)
         assert margin_needed == 0.0
-        
+
         # Test exception (ValueError/ZeroDivisionError)
         # We can set margin_ratio to raise an exception by setting margin to bad value
         class BadPosition:
             margin = "invalid"
             margin_ratio = 1.0
-        
-        margin_needed = client._calculate_margin_to_safety(BadPosition())
+
+        margin_needed = client._calculate_margin_to_safety(BadPosition())  # type: ignore
         assert margin_needed == 0.0
 
     @pytest.mark.asyncio
     async def test_initialize_openai(self) -> None:
         client = LLMClient(provider="openai", api_key="test-key")
-        
-        from unittest.mock import patch, MagicMock
-        with patch("openai.AsyncOpenAI") as MockOpenAI:
+
+        from unittest.mock import patch
+        with patch("openai.AsyncOpenAI") as mock_openai:
             await client.initialize()
             assert client._client is not None
-            MockOpenAI.assert_called_once_with(api_key="test-key")
+            mock_openai.assert_called_once_with(api_key="test-key")
 
     @pytest.mark.asyncio
     async def test_initialize_gemini(self) -> None:
         client = LLMClient(provider="gemini", api_key="test-key")
-        
-        from unittest.mock import patch, MagicMock
-        with patch("google.genai.Client") as MockGenAI:
+
+        from unittest.mock import patch
+        with patch("google.genai.Client") as mock_genai:
             await client.initialize()
             assert client._client is not None
-            MockGenAI.assert_called_once_with(api_key="test-key")
+            mock_genai.assert_called_once_with(api_key="test-key")
 
     @pytest.mark.asyncio
     async def test_initialize_import_error(self) -> None:
         client = LLMClient(provider="openai", api_key="test-key")
-        
-        from unittest.mock import patch
+
         import builtins
+        from unittest.mock import patch
         original_import = builtins.__import__
-        
+
         def mock_import(name, *args, **kwargs):
             if name == "openai":
                 raise ImportError("Mocked missing openai")
             return original_import(name, *args, **kwargs)
-            
+
         with patch("builtins.__import__", side_effect=mock_import):
             await client.initialize()
             assert client._client is None
@@ -137,16 +136,16 @@ class TestLLMClient:
     async def test_call_llm_openai(self) -> None:
         client = LLMClient(provider="openai", api_key="test-key")
         client._client = type("MockOpenAIClient", (), {})()
-        
+
         from unittest.mock import AsyncMock, MagicMock
         client._client.chat = MagicMock()
         client._client.chat.completions = MagicMock()
-        
+
         mock_response = MagicMock()
         mock_response.choices = [MagicMock()]
         mock_response.choices[0].message.content = "Title\nMessage content"
         client._client.chat.completions.create = AsyncMock(return_value=mock_response)
-        
+
         title, message = await client._call_llm("test prompt")
         assert title == "Title"
         assert message == "Message content"
@@ -155,19 +154,19 @@ class TestLLMClient:
     async def test_call_llm_gemini(self) -> None:
         client = LLMClient(provider="gemini", api_key="test-key")
         client._client = type("MockGeminiClient", (), {})()
-        
+
         from unittest.mock import AsyncMock, MagicMock
         client._client.aio = MagicMock()
         client._client.aio.models = MagicMock()
-        
+
         mock_response = MagicMock()
         mock_response.text = "# Risk Alert\nHere is the risk"
         client._client.aio.models.generate_content = AsyncMock(return_value=mock_response)
-        
+
         title, message = await client._call_llm("test prompt")
         assert title == "Risk Alert"
         assert message == "Here is the risk"
-        
+
     @pytest.mark.asyncio
     async def test_call_llm_unknown_provider(self) -> None:
         client = LLMClient(provider="unknown", api_key="test-key")
@@ -183,12 +182,12 @@ class TestLLMClient:
     ) -> None:
         client = LLMClient(provider="openai", api_key="test-key")
         client._client = "mocked"
-        
-        from unittest.mock import patch, AsyncMock
+
+        from unittest.mock import AsyncMock, patch
         with patch.object(client, "_call_llm", new_callable=AsyncMock) as mock_call:
             mock_call.side_effect = Exception("LLM is down")
             title, message = await client.generate_alert_message(risky_position, portfolio_with_risk)
-            
+
             assert "⚠️" in title
             assert "liquidation" in message
 
@@ -199,12 +198,12 @@ class TestLLMClient:
     ) -> None:
         client = LLMClient(provider="openai", api_key="test-key")
         client._client = "mocked"
-        
-        from unittest.mock import patch, AsyncMock
+
+        from unittest.mock import AsyncMock, patch
         with patch.object(client, "_call_llm", new_callable=AsyncMock) as mock_call:
             mock_call.side_effect = Exception("LLM is down")
             summary = await client.generate_summary(portfolio_with_risk)
-            
+
             assert "Portfolio for" in summary
 
     @pytest.mark.asyncio
@@ -214,10 +213,10 @@ class TestLLMClient:
     ) -> None:
         client = LLMClient(provider="openai", api_key="test-key")
         client._client = "mocked"
-        
-        from unittest.mock import patch, AsyncMock
+
+        from unittest.mock import AsyncMock, patch
         with patch.object(client, "_call_llm", new_callable=AsyncMock) as mock_call:
             mock_call.return_value = ("Title", "Mocked summary from LLM")
             summary = await client.generate_summary(portfolio_with_risk)
-            
+
             assert summary == "Mocked summary from LLM"

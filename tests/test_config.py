@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import os
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -121,7 +119,7 @@ alert_rules:
 
         # Change CWD to the temp directory where config.yaml exists
         monkeypatch.chdir(tmp_path)
-        
+
         config = SentinelConfig.load()
         assert config.network == "testnet"
         assert config.poll_interval_seconds == 45
