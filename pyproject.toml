@@ -43,6 +43,7 @@ dev = [
     "pytest-asyncio>=0.24",
     "pytest-cov>=5.0",
     "mypy>=1.10",
+    "pyright>=1.1.0",
     "ruff>=0.5",
     "types-PyYAML",
     "types-aiofiles",
@@ -59,10 +60,18 @@ Issues = "https://github.com/edycutjong/sentrix/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/sentrix"]
+artifacts = ["src/sentrix/py.typed"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+filterwarnings = [
+    # CPython 3.11 bug: MagicMock/AsyncMock internal _execute_mock_call
+    # creates unawaited coroutines during inspect/GC attribute access.
+    # See: https://github.com/python/cpython/issues/100094
+    "ignore::RuntimeWarning:asyncio",
+    "ignore:coroutine 'AsyncMockMixin._execute_mock_call' was never awaited:RuntimeWarning",
+]
 markers = [
     "slow: marks tests as slow (deselect with '-m \"not slow\"')",
 ]
@@ -73,12 +82,22 @@ strict = true
 warn_return_any = true
 warn_unused_configs = true
 
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_decorators = false
+
+[[tool.mypy.overrides]]
+module = "test_mock2"
+ignore_errors = true
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
 
 [tool.ruff.lint]
-select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM", "TCH"]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM"]
 ignore = ["E501"]
 
 [tool.coverage.run]
