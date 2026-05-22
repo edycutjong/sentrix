@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from typing import Any
 
 from sentrix.clients.injective import InjectiveClient
 from sentrix.clients.llm import LLMClient
@@ -51,7 +52,7 @@ class Poller:
         self.analyzer = RiskAnalyzer(llm_client=self.llm)
 
         # Delivery channels
-        self.deliveries: list[tuple[DeliveryChannel, object]] = []
+        self.deliveries: list[tuple[DeliveryChannel, Any]] = []
         self._setup_deliveries()
 
         self._running = False
@@ -198,5 +199,5 @@ class Poller:
             "poll_interval": self.config.poll_interval_seconds,
             "delivery_channels": [ch.value for ch, _ in self.deliveries],
             "alert_rules": len(self.config.alert_rules),
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
         }

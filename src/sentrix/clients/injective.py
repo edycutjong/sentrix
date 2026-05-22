@@ -50,8 +50,8 @@ class InjectiveClient:
             return
 
         try:
-            from pyinjective.async_client import AsyncClient
-            from pyinjective.core.network import Network
+            from pyinjective.async_client import AsyncClient  # type: ignore
+            from pyinjective.core.network import Network  # type: ignore
 
             net = Network.mainnet() if self.network_name == "mainnet" else Network.testnet()
             self._client = AsyncClient(net)

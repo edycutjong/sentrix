@@ -2,20 +2,20 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class PositionDirection(str, Enum):
+class PositionDirection(StrEnum):
     """Direction of a derivative position."""
 
     LONG = "long"
     SHORT = "short"
 
 
-class AlertSeverity(str, Enum):
+class AlertSeverity(StrEnum):
     """Severity levels for alerts."""
 
     LOW = "low"
@@ -24,7 +24,7 @@ class AlertSeverity(str, Enum):
     CRITICAL = "critical"
 
 
-class AlertType(str, Enum):
+class AlertType(StrEnum):
     """Types of alerts that can be triggered."""
 
     LIQUIDATION_WARNING = "liquidation_warning"
@@ -35,7 +35,7 @@ class AlertType(str, Enum):
     POSITION_CLOSED = "position_closed"
 
 
-class DeliveryChannel(str, Enum):
+class DeliveryChannel(StrEnum):
     """Notification delivery channels."""
 
     TELEGRAM = "telegram"
@@ -142,7 +142,7 @@ class PortfolioSnapshot(BaseModel):
 
     address: str = Field(description="Injective address (inj1...)")
     label: str | None = Field(default=None, description="Human-readable label")
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(UTC))
     spot_balances: list[SpotBalance] = Field(default_factory=list)
     derivative_positions: list[DerivativePosition] = Field(default_factory=list)
 

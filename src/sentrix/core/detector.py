@@ -7,7 +7,7 @@ to detect liquidation proximity, balance changes, and margin degradation.
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sentrix.models.alert import AlertRule, RiskEvent
 from sentrix.models.position import (
@@ -186,7 +186,7 @@ class RiskDetector:
 
     def _apply_cooldowns(self, events: list[RiskEvent]) -> list[RiskEvent]:
         """Filter out events that are within their cooldown period."""
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         filtered: list[RiskEvent] = []
 
         for event in events:

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from pydantic import BaseModel, Field
 
@@ -34,7 +34,7 @@ class Alert(BaseModel):
         default=None, description="Full portfolio snapshot at alert time"
     )
     delivered_via: list[DeliveryChannel] = Field(default_factory=list)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
 
     @property
     def severity_emoji(self) -> str:
@@ -85,4 +85,4 @@ class RiskEvent(BaseModel):
     position: DerivativePosition | None = None
     snapshot: PortfolioSnapshot | None = None
     raw_data: dict = Field(default_factory=dict)
-    detected_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    detected_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

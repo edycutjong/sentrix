@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 from sentrix.models.position import DerivativePosition, PortfolioSnapshot
 
@@ -36,7 +37,7 @@ class LLMClient:
         self.provider = provider
         self.model = model
         self.api_key = api_key
-        self._client = None
+        self._client: Any = None
 
     async def initialize(self) -> None:
         """Initialize the LLM client."""
@@ -133,7 +134,7 @@ class LLMClient:
         # Parse title from first line, rest is message
         if not content.strip():
             return "Risk Alert", ""
-            
+
         lines = content.strip().split("\n", 1)
         title = lines[0].strip().lstrip("#").strip()
         message = lines[1].strip() if len(lines) > 1 else content.strip()

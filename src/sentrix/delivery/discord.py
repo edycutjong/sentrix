@@ -41,17 +41,16 @@ class DiscordDelivery:
         }
 
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    self.webhook_url,
-                    data=json.dumps(payload),
-                    headers={"Content-Type": "application/json"},
-                ) as resp:
-                    if resp.status not in (200, 204):
-                        body = await resp.text()
-                        logger.error("Discord webhook failed (%d): %s", resp.status, body)
-                    else:
-                        logger.info("Discord alert sent: %s", alert.title)
+            async with aiohttp.ClientSession() as session, session.post(
+                self.webhook_url,
+                data=json.dumps(payload),
+                headers={"Content-Type": "application/json"},
+            ) as resp:
+                if resp.status not in (200, 204):
+                    body = await resp.text()
+                    logger.error("Discord webhook failed (%d): %s", resp.status, body)
+                else:
+                    logger.info("Discord alert sent: %s", alert.title)
         except Exception as e:
             logger.error("Failed to send Discord alert: %s", e)
             raise
