@@ -10,7 +10,7 @@ VENV := .venv
 PYTHON := $(VENV)/bin/python
 PIP := $(VENV)/bin/pip
 
-.PHONY: test lint typecheck ci bench install clean
+.PHONY: test lint typecheck ci bench install clean watch-demo watch-live status-demo status-live history
 
 $(VENV)/bin/activate:
 	$(PYTHON_BIN) -m venv $(VENV)
@@ -32,6 +32,21 @@ ci: lint typecheck test
 
 bench: install
 	PYTHONPATH=src $(PYTHON) scripts/bench.py
+
+watch-demo: install
+	PYTHONPATH=src $(PYTHON) -m sentrix.cli watch --demo
+
+watch-live: install
+	PYTHONPATH=src $(PYTHON) -m sentrix.cli watch
+
+status-demo: install
+	PYTHONPATH=src $(PYTHON) -m sentrix.cli status --demo
+
+status-live: install
+	PYTHONPATH=src $(PYTHON) -m sentrix.cli status
+
+history: install
+	PYTHONPATH=src $(PYTHON) -m sentrix.cli history
 
 clean:
 	rm -rf $(VENV)

@@ -125,7 +125,7 @@ class InjectiveClient:
 
         try:
             # The Injective indexer returns positions with all computed fields
-            response = await self._client.fetch_derivative_positions(
+            response = await self._client.fetch_derivative_positions(  # type: ignore
                 subaccount_id=address,
             )
             positions = []

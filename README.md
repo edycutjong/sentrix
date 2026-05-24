@@ -16,6 +16,9 @@
   ![Injective](https://img.shields.io/badge/Injective-00A3FF?style=flat&logoColor=white)
   ![OpenAI](https://img.shields.io/badge/GPT--4o-412991?style=flat&logo=openai&logoColor=white)
   ![Gemini](https://img.shields.io/badge/Gemini_1.5_Flash-F4B400?style=flat&logo=google-gemini&logoColor=white)
+  ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat&logo=sqlite&logoColor=white)
+  ![Telegram](https://img.shields.io/badge/Telegram-26A69A?style=flat&logo=telegram&logoColor=white)
+  ![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)
   [![CI](https://github.com/edycutjong/sentrix/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/sentrix/actions/workflows/ci.yml)
 
 </div>
