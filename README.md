@@ -5,9 +5,7 @@
 
   <br/>
 
-  [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-06b6d4?style=for-the-badge)](https://github.com/edycutjong/sentrix)
-  [![Pitch Video](https://img.shields.io/badge/🎬_Pitch-Video-ef4444?style=for-the-badge)](https://youtu.be/your-video)
-  [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-f59e0b?style=for-the-badge)](https://github.com/edycutjong/sentrix/pitch)
+  [![Pitch Video](https://img.shields.io/badge/🎬_Pitch-Video-ef4444?style=for-the-badge)](https://youtu.be/NpVsBugTKyE)
   [![Built for Injective](https://img.shields.io/badge/HackQuest-Injective_Solo_AI-8b5cf6?style=for-the-badge)](https://www.hackquest.io/hackathons/Injective-Solo-AI-Builder-Sprint)
 
   <br/>
