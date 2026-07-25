@@ -1482,7 +1482,7 @@ wheels = [
 
 [[package]]
 name = "injective-py"
-version = "1.14.1"
+version = "1.11.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "aiohttp" },
@@ -1490,7 +1490,6 @@ dependencies = [
     { name = "bip32" },
     { name = "ecdsa" },
     { name = "eip712" },
-    { name = "eth-pydantic-types" },
     { name = "grpcio" },
     { name = "grpcio-tools" },
     { name = "hdwallets" },
@@ -1501,9 +1500,9 @@ dependencies = [
     { name = "web3" },
     { name = "websockets" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ce/b1/8c62f1bfa21f957a7090bd0ff4e59f37e92e35db8c507e39ea792ef8bbd5/injective_py-1.14.1.tar.gz", hash = "sha256:ed5e14229112a99b379cad5ace5f3bc75a0bbb3fda3d9c688c906cb11fc8296a", size = 629739, upload-time = "2026-04-30T02:04:00.102Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bf/75/9aa5d305639041239e6b7f13b294af9887df8aba2d01a8e4c135ce92260e/injective_py-1.11.2.tar.gz", hash = "sha256:cf041f3da6b0dba7e31a8bc280b2c7bf8e72404f42256a9cdf2d6889ff3409cd", size = 634812, upload-time = "2025-09-24T15:31:49.906Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/db/30ca889137e72df65c29d589eb0277bec50d47d9c2228424358d930dc980/injective_py-1.14.1-py3-none-any.whl", hash = "sha256:b2f47fd15988e75ac0afbf4b0064bf17351cbed0e139356c814896d3c8298f11", size = 1188046, upload-time = "2026-04-30T02:04:01.816Z" },
+    { url = "https://files.pythonhosted.org/packages/8b/94/99e4336441b732c752c53aec013a40bdca42fc7d4156049dee1334d6bb16/injective_py-1.11.2-py3-none-any.whl", hash = "sha256:27db89f98a5f2a770e315c28f58a0266c1f120c2b8ba32ae69927ed90b0b4ae1", size = 1197093, upload-time = "2025-09-24T15:31:48.131Z" },
 ]
 
 [[package]]
@@ -1877,6 +1876,15 @@ wheels = [
 ]
 
 [[package]]
+name = "nodeenv"
+version = "1.10.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/24/bf/d1bda4f6168e0b2e9e5958945e01910052158313224ada5ce1fb2e1113b8/nodeenv-1.10.0.tar.gz", hash = "sha256:996c191ad80897d076bdfba80a41994c2b47c68e224c542b48feba42ba00f8bb", size = 55611, upload-time = "2025-12-20T14:08:54.006Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/88/b2/d0896bdcdc8d28a7fc5717c305f1a861c26e18c05047949fb371034d98bd/nodeenv-1.10.0-py2.py3-none-any.whl", hash = "sha256:5bb13e3eed2923615535339b3c620e76779af4cb4c6a90deccc9e36b274d3827", size = 23438, upload-time = "2025-12-20T14:08:52.782Z" },
+]
+
+[[package]]
 name = "openai"
 version = "2.37.0"
 source = { registry = "https://pypi.org/simple" }
@@ -2246,6 +2254,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pyright"
+version = "1.1.411"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "nodeenv" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7e/ab/265f7dc69d28113ebba19092e57b075f41543b2ed048429c5f56e2b88eac/pyright-1.1.411.tar.gz", hash = "sha256:d885a0551f2e763b089a02702174e7f4ba77548cddabc972ab86d1f7f1b0f998", size = 4112861, upload-time = "2026-06-25T02:14:06.37Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0a/49/385be530a6a5b78d1cbcd5c2e38debc8959a2fc6bdb716f4e581002979fc/pyright-1.1.411-py3-none-any.whl", hash = "sha256:dc7c72a8e2700c55baa127554040e067041ea53ccfd50bf96308cc4291c7d5d9", size = 6181526, upload-time = "2026-06-25T02:14:04.691Z" },
+]
+
+[[package]]
 name = "pytest"
 version = "9.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -2587,6 +2608,7 @@ dependencies = [
 [package.optional-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-asyncio" },
     { name = "pytest-cov" },
@@ -2601,10 +2623,11 @@ requires-dist = [
     { name = "aiosqlite", specifier = ">=0.20" },
     { name = "click", specifier = ">=8.0" },
     { name = "google-genai", specifier = ">=1.0" },
-    { name = "injective-py", specifier = ">=1.7.0" },
+    { name = "injective-py", specifier = ">=1.7.0,<1.12.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.10" },
     { name = "openai", specifier = ">=1.0" },
     { name = "pydantic", specifier = ">=2.0" },
+    { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.0" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0" },
@@ -2619,11 +2642,11 @@ provides-extras = ["dev"]
 
 [[package]]
 name = "setuptools"
-version = "82.0.1"
+version = "83.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/4f/db/cfac1baf10650ab4d1c111714410d2fbb77ac5a616db26775db562c8fab2/setuptools-82.0.1.tar.gz", hash = "sha256:7d872682c5d01cfde07da7bccc7b65469d3dca203318515ada1de5eda35efbf9", size = 1152316, upload-time = "2026-03-09T12:47:17.221Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/34/26/f5d29e25ffdb535afef2d35cdb55b325298f96debd670da4c325e08d70f4/setuptools-83.0.0.tar.gz", hash = "sha256:025bccbbf0fa05b6192bc64ae1e7b16e001fd6d6d4d5de03c97b1c1ade523bef", size = 1154254, upload-time = "2026-07-04T15:31:22.699Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9d/76/f789f7a86709c6b087c5a2f52f911838cad707cc613162401badc665acfe/setuptools-82.0.1-py3-none-any.whl", hash = "sha256:a59e362652f08dcd477c78bb6e7bd9d80a7995bc73ce773050228a348ce2e5bb", size = 1006223, upload-time = "2026-03-09T12:47:15.026Z" },
+    { url = "https://files.pythonhosted.org/packages/5d/40/e1e72872c6354b306daef1703549e8e83b4d43cfea356311bf722a043752/setuptools-83.0.0-py3-none-any.whl", hash = "sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3", size = 1008090, upload-time = "2026-07-04T15:31:20.885Z" },
 ]
 
 [[package]]
